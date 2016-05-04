@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Custom URL Builder</title>
+
+  <!-- Bootstrap: Instantly make page look nicer -->
+  <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+  <style>
+    /* Form field styling */
+    label { display: block; font-weight: bold; }
+    input { display: block; margin-bottom: 1em; }
+
+    /* Override Bootstrap so that 'size' attribute on inputs is honored. */
+    input { width: auto; }
+
+    /* Other styles */
+    .hidden { display: none }
+  </style>
+
+  <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+  <script>
+    $(function() {
+      $('#generate').click(function() {
+        var url = $('#url').val();
+        var utm_source = $('#utm_source').val();
+        var utm_medium = $('#utm_medium').val();
+        var utm_campaign = $('#utm_campaign').val();
+
+        var gaurl = url + '?' + $.param({
+          utm_source: utm_source,
+          utm_medium: utm_medium,
+          utm_campaign: utm_campaign
+        });
+        $('#gaurl').val(gaurl);
+
+        // Warn if URL looks like a local URL
+        if (gaurl.indexOf('localhost') !== -1 ||
+            gaurl.indexOf('127.0.0.1') !== -1)
+        {
+          $('.local-url-alert').removeClass('hidden');
+        } else {
+          $('.local-url-alert').addClass('hidden');
+        }
+      });
+    });
+  </script>
+</head>
+<body>
+  <div class="container">
+    <h1>UTM Builder</h1>
+
+    <label for="url">Website URL*</label>
+    <input id="url" type="text" value="" size="100"/>
+
+    <label for="utm_source">Campaign Source*</label>
+    <input id="utm_source" list="sources" type="text" value="" size="30"/>
+    <datalist id="sources">
+      <option value="blog">
+      <option value="linkedin">
+      <option value="twitter">
+      <option value="facebook">
+      <option value="github">
+      <option value="stackoverflow">
+      <option value="newsletter">
+      <option value="drip">
+      <option value="feeder">
+      <option value="nurture">
+      <option value="signature">
+      <option value="bing">
+      <option value="google">
+      <option value="yahoo">
+      <option value="partner">
+    </datalist>
+
+
+    <label for="utm_medium">Campaign Medium*</label>
+    <input id="utm_medium" list="mediums" type="text" value="" size="30"/>
+    <datalist id="mediums">
+      <option value="email">
+      <option value="social">
+      <option value="community">
+      <option value="cpc">
+      <option value="display">
+      <option value="partner">
+    </datalist>
+
+    <label for="utm_campaign">Campaign Name*</label>
+    <input id="utm_campaign" type="text" value="" size="30"/>
+
+    <input id="generate" type="submit" value="Generate URL"/>
+
+    <hr/>
+
+    <label for="gaurl">UTM Link</label>
+    <div class="alert local-url-alert hidden">
+      <strong>Local URL</strong> This URL cannot be accessed on other computers.
+    </div>
+    <input id="gaurl" type="text" value="" size="100"/>
+
+    <hr/>
+
+    <a href="https://bitly.com/a/bitlinks">&lt;&lt; For Bit.ly</a>
+  </div>
+</body>
+</html>
